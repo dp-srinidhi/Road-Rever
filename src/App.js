@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 // Pages
 import ReportPothole from './pages/ReportPothole';
 import MapPage from './pages/MapPage';
-import AboutUs from './pages/About';
 import Dashboard from './pages/Dashboard';
 import Dronedata from "./pages/Dronedata";   
 import Trafficanalysis from "./pages/trafficanalysis";
@@ -183,8 +182,8 @@ const Navbar = () => {
 
                 <ul className={isOpen ? "nav-links active" : "nav-links"}>
 <li>
-        <Link to="/about" className="nav-link" onClick={handleNavLinkClick}>
-            About Us
+        <Link to="/trafficanalysis" className="nav-link" onClick={handleNavLinkClick}>
+            Traffic status
         </Link>
     </li>                    <li><Link to="/report-pothole" className="nav-link" onClick={handleNavLinkClick}>Report Pothole</Link></li>
                     <li><Link to="/map" className="nav-link" onClick={handleNavLinkClick}>Map</Link></li>
@@ -209,8 +208,7 @@ function App() {
                     <Route path="/" element={<HomeContent />} />
                     <Route path="/report-pothole" element={<ReportPothole />} />
                     <Route path="/map" element={<MapPage />} />
-                      <Route path="/about" element={<AboutUs />} />
-                    <Route path="/Dronedata" element={<Dronedata />} />
+                     <Route path="/Dronedata" element={<Dronedata />} />
                     <Route path="/trafficanalysis" element={<Trafficanalysis />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                 </Routes>
