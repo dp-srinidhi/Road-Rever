@@ -1,38 +1,699 @@
-.App {
-  text-align: center;
+/* --- Global Resets and Variables --- */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Leaflet CSS */
+@import url('https://unpkg.com/leaflet@1.9.5/dist/leaflet.css');
+
+:root {
+    --color-dark-green: #004d40;
+    --color-light-green: #e0f2f1;
+    --color-white: #ffffff;
+    --color-black: #212121;
+    --color-gray: #f4f4f4;
+    --color-text: #333;
+    --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 3rem;
+    --border-radius: 8px;
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 10px 15px rgba(0, 0, 0, 0.1);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* --- Base Styles --- */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body {
+    font-family: var(--font-primary);
+    color: var(--color-text);
+    background-color: var(--color-white);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+h1, h2, h3 {
+    margin-bottom: 1rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-dark-green);
+}
+
+h1 { font-size: 2.5rem; 
+      font-family: "Times New Roman";}
+h2 { font-size: 2rem; }
+h3 { font-size: 1.25rem; }
+
+p {
+    margin-bottom: 1rem;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--border-radius);
+}
+
+/* --- Utility Classes --- */
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.section-intro {
+    max-width: 700px;
+    margin: 0 auto var(--spacing-md) auto;
+    font-size: 1.1rem;
+    color: #555;
+}
+
+.bg-light {
+    background-color: var(--color-gray);
+}
+
+.bg-dark {
+    background-color: var(--color-dark-green);
+    color: var(--color-white);
+}
+.bg-dark h2, .bg-dark p {
+    color: var(--color-white);
+}
+
+.full-width-image {
+    width: 100%;
+    height: auto;
+    border-radius: 0; /* Full-width images shouldn't have rounded corners */
+}
+
+/* --- Buttons --- */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: var(--color-dark-green);
+    color: var(--color-white);
+    border: 2px solid var(--color-dark-green);
+}
+.btn-primary:hover {
+    background-color: #00382d;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-light {
+    background-color: var(--color-white);
+    color: var(--color-dark-green);
+    border: 2px solid var(--color-white);
+}
+.btn-light:hover {
+    background-color: var(--color-light-green);
+    color: var(--color-dark-green);
+    transform: translateY(-2px);
+}
+
+/* --- New Navbar Styles --- */
+.navbar {
+    background: var(--color-white);
+    padding: 1rem 0;
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+}
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.navbar-logo {
+    font-size: 1.5rem;
+
+    font-weight: 700;
+    color: var(--color-dark-green);
+}
+.nav-links {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: var(--spacing-md);
+    margin: 0;
+}
+.nav-link {
+    text-decoration: none;
+    color: var(--color-text);
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+.nav-link:hover {
+    color: var(--color-dark-green);
+}
+.btn-nav {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.9rem;
+    background-color: var(--color-dark-green);
+    color: var(--color-white);
+    border: 2px solid var(--color-dark-green);
+}
+.btn-nav:hover {
+    background-color: #00382d;
+    box-shadow: none;
+    transform: none;
+}
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-dark-green);
+}
+
+/* --- Section Styles --- */
+section {
+    padding: var(--spacing-lg) 0;
+}
+
+/* --- Hero Section --- */
+.hero-section {
+    background-color: var(--color-light-green);
+    padding: var(--spacing-lg) 0;
+    text-align: center;
+    /* Added padding-top to account for sticky nav. */
+    padding-top: calc(var(--spacing-lg) + 2rem);
+}
+.hero-section .subtitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-dark-green);
+    margin-bottom: 1rem;
+}
+.hero-section p {
+    max-width: 700px;
+    margin: 0 auto 1.5rem auto;
+}
+
+/* --- CTA Section --- */
+.cta-section {
+    padding: var(--spacing-lg) 0;
+}
+.cta-section h2 {
+    max-width: 700px;
+    margin: 0 auto 1.5rem auto;
+}
+
+/* --- Feature Section (2-column) --- */
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+    align-items: center;
+}
+
+.grid-container .image-content {
+    text-align: center;
+}
+.grid-container .image-content img {
+    box-shadow: var(--shadow-md);
+}
+
+/* Desktop layout for 2-column sections */
+@media (min-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr 1fr;
+    }
+    .grid-container.reverse .text-content {
+        order: 2;
+    }
+    .grid-container.reverse .image-content {
+        order: 1;
+    }
+}
+
+/* --- Smart Filling Section --- */
+.feature-card-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.feature-card {
+    background: var(--color-white);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    text-align: left;
+    transition: all 0.3s ease;
+}
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+.feature-card h3 {
+    color: var(--color-dark-green);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Desktop layout for 3-column cards */
+@media (min-width: 768px) {
+    .feature-card-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* --- Report Section (Form) --- */
+.report-section .text-content {
+    padding-bottom: var(--spacing-md);
+}
+.report-section .form-content {
+    background: var(--color-white);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+}
+
+/* --- Added rules for when form is on a light background --- */
+.report-section.bg-light .form-content {
+    background-color: var(--color-white);
+    box-shadow: var(--shadow-sm); /* Lighter shadow for a light bg */
+}
+.report-section.bg-light .form-group label {
+    color: var(--color-dark-green); /* Ensure labels are dark */
+}
+/* --- End of added rules --- */
+
+
+@media (min-width: 768px) {
+    .report-section .text-content {
+        padding-bottom: 0;
+    }
+}
+
+/* --- Form Styles --- */
+.report-form {
+    width: 100%;
+}
+.form-group {
+    margin-bottom: 1.25rem;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--color-dark-green); /* Default label color */
+}
+
+/* --- When section is bg-dark, labels need to be light --- */
+.report-section.bg-dark .form-group label {
+    color: var(--color-dark-green); /* This was already correct */
+}
+/* --- End of rule --- */
+
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: var(--font-primary);
+}
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-dark-green);
+    box-shadow: 0 0 0 2px var(--color-light-green);
+}
+
+/* --- New File Input Styles --- */
+.form-group input[type="file"] {
+    padding: 0;
+    border: none;
+    font-size: 0.9rem;
+}
+/* Style the button part of the file input */
+.form-group input[type="file"]::file-selector-button {
+    background-color: var(--color-light-green);
+    color: var(--color-dark-green);
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    font-family: var(--font-primary);
+    margin-right: 1rem;
+}
+.form-group input[type="file"]::file-selector-button:hover {
+    background-color: #cdeae7;
+}
+
+/* --- New Location Button Styles --- */
+.btn-location {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 2px solid #ccc;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem; /* Space between icon and text */
+}
+.btn-location:hover {
+    background-color: #e0e0e0;
+    transform: translateY(-2px);
+    color: #333;
+}
+.btn-location svg {
+    width: 18px;
+    height: 18px;
+}
+.location-status {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    text-align: center;
+    font-weight: 500;
+    background-color: var(--color-light-green);
+    color: var(--color-dark-green);
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+
+.report-form button {
+    width: 100%;
+}
+
+/* --- Footer --- */
+.footer-section {
+    background: var(--color-black);
+    color: #aaa;
+    padding: var(--spacing-md) 0;
+    text-align: center;
+    font-size: 0.9rem;
+}
+.footer-section p {
+    margin: 0.5rem 0;
+    color: var(--color-white);
+}
+
+/* --- Success Message --- */
+.success-message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--color-dark-green);
+    color: var(--color-white);
+    padding: 1rem 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    z-index: 1000;
+    font-weight: 600;
+}
+
+/* --- Responsive Navbar --- */
+@media (max-width: 768px) {
+    .nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--color-white);
+        flex-direction: column;
+        align-items: stretch;
+        border-bottom: 1px solid #e0e0e0;
+        box-shadow: var(--shadow-sm);
+        
+        /* Hide by default */
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+    }
+    .nav-links.active {
+        max-height: 300px; /* Adjust as needed */
+        padding: 0.5rem 0;
+    }
+    .nav-links li {
+        width: 100%;
+        text-align: center;
+    }
+    .nav-link {
+        display: block;
+        padding: 1rem;
+    }
+    .btn-nav {
+        margin: 0.5rem 1rem;
+    }
+    .menu-toggle {
+        display: block;
+    }
+}
+/* --- Report Pothole Section Styles --- */
+.report-pothole-section {
+    padding: var(--spacing-lg) 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 120px); 
+    background-color: var(--color-gray);
+}
+
+.report-form-card {
+    background: var(--color-white);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    max-width: 600px;
+    width: 100%;
+}
+
+.report-form-card h2 {
+    color: var(--color-dark-green);
+    margin-bottom: 0.5rem;
+}
+
+.report-form-card .section-intro {
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text);
+}
+
+.report-form .form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.report-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.report-form input[type="text"],
+.report-form textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: var(--color-text);
+    resize: vertical;
+}
+
+/* Location Group Styling */
+.report-form .location-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.report-form .location-group input {
+    flex-grow: 1;
+    cursor: default;
+    background-color: #f9f9f9;
+}
+
+.report-form .location-group .active-location {
+    background-color: var(--color-light-green);
+    border-color: var(--color-dark-green);
+    font-weight: bold;
+}
+
+/* File Input Styling */
+.report-form input[type="file"] {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    width: 100%;
+}
+
+.report-form .file-info {
+    font-size: 0.85rem;
+    color: var(--color-dark-green);
+    margin-top: 5px;
+}
+
+/* Status Message Styling */
+.report-form .status-message {
+    padding: 1rem;
+    margin-top: var(--spacing-md);
+    border-radius: var(--border-radius);
+    font-weight: 600;
+}
+
+.report-form .status-message.success {
+    background-color: #e8f5e9; /* Light green */
+    color: var(--color-dark-green);
+    border: 1px solid var(--color-dark-green);
+}
+
+.report-form .status-message.error {
+    background-color: #ffebee; /* Light red */
+    color: #c62828; /* Dark red */
+    border: 1px solid #c62828;
+}
+
+/* Disabled button state */
+.report-form button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.submit-btn {
+  width: 100%;
+  background-color: #22c55e; /* Green */
   color: white;
+  padding: 14px 20px;
+  font-size: 18px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: 0.25s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.App-link {
-  color: #61dafb;
+.submit-btn:hover:not(:disabled) {
+  background-color: #16a34a; /* Darker green */
+  transform: translateY(-2px);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.submit-btn:disabled {
+  background-color: #9ca3af; /* Gray */
+  cursor: not-allowed;
+  transform: none;
 }
+
+.about-container {
+    padding: 40px;
+    max-width: 1100px;
+    margin: auto;
+    color: #222;
+}
+
+/* About */
+.about-section {
+    margin-bottom: 40px;
+}
+.about-section h1 {
+    font-size: 2.4rem;
+    margin-bottom: 10px;
+}
+
+/* Services */
+.services-list {
+    list-style: none;
+    padding: 0;
+    font-size: 1.2rem;
+    line-height: 2.2rem;
+}
+
+/* Contact Form */
+.contact-form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 350px;
+}
+.contact-form input,
+.contact-form textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+.contact-form button {
+    padding: 10px;
+    border: none;
+    background: #00796b;
+    color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.contact-info {
+    margin-top: 20px;
+}
+
+/* Team Section */
+.team-section {
+    margin-top: 50px;
+}
+.team-grid {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Team Cards */
+.team-card {
+    background: #f3f3f3;
+    border-radius: 12px;
+    padding: 20px;
+    width: 250px;
+    text-align: center;
+    box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
+}
+
+.team-img-placeholder {
+    width: 100%;
+    height: 180px;
+    background: #d9d9d9;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
