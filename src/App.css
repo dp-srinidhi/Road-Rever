@@ -697,3 +697,27 @@ section {
     font-weight: bold;
 }
 
+/* --- Contact Section --- */
+.contact-section {
+    padding: var(--spacing-lg) 0;
+    background-color: var(--color-light-green);
+}
+
+.contact-section h2 {
+    margin-bottom: 0.5rem;
+}
+
+.contact-details {
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: var(--color-text);
+}
+
+.contact-details p {
+    margin: 4px 0;
+}
+
+.contact-form {
+    margin: 25px auto 0 auto;
+    max-width: 450px;
+}
