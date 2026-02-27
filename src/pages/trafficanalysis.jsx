@@ -51,40 +51,40 @@ const TrafficAnalysis = () => {
     if (value > 30 && value <= 50) return "MODERATE TRAFFIC";
     return "HIGH TRAFFIC";
   }
+// eslint-disable-next-line react-hooks/exhaustive-deps
+useEffect(() => {
+  async function fetchTraffic() {
+    const results = [];
 
-  useEffect(() => {
-    async function fetchTraffic() {
-      const results = [];
+    for (let loc of locations) {
+      const url = `https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?point=${loc.point}&key=${API_KEY}`;
+      const res = await fetch(url);
+      const data = await res.json();
 
-      for (let loc of locations) {
-        const url = `https://api.tomtom.com/traffic/services/4/flowSegmentData/absolute/10/json?point=${loc.point}&key=${API_KEY}`;
-        const res = await fetch(url);
-        const data = await res.json();
+      if (data && data.flowSegmentData) {
+        const seg = data.flowSegmentData;
+        const congestionPercent = Math.round(
+          ((seg.freeFlowSpeed - seg.currentSpeed) / seg.freeFlowSpeed) * 100
+        );
+        const trafficLevel = getTrafficLevel(congestionPercent);
 
-        if (data && data.flowSegmentData) {
-          const seg = data.flowSegmentData;
-          const congestionPercent = Math.round(
-            ((seg.freeFlowSpeed - seg.currentSpeed) / seg.freeFlowSpeed) * 100
-          );
-          const trafficLevel = getTrafficLevel(congestionPercent);
-
-          results.push({
-            area: loc.name,
-            currentSpeed: seg.currentSpeed + " km/h",
-            freeFlow: seg.freeFlowSpeed + " km/h",
-            confidence: seg.confidence,
-            congestion: congestionPercent + "%",
-            status: trafficLevel,
-            roverOK: trafficLevel === "HIGH TRAFFIC" ? false : true
-          });
-        }
+        results.push({
+          area: loc.name,
+          currentSpeed: seg.currentSpeed + " km/h",
+          freeFlow: seg.freeFlowSpeed + " km/h",
+          confidence: seg.confidence,
+          congestion: congestionPercent + "%",
+          status: trafficLevel,
+          roverOK: trafficLevel === "HIGH TRAFFIC" ? false : true
+        });
       }
-
-      setTraffic(results);
     }
 
-    fetchTraffic();
-  }, [locations]);
+    setTraffic(results);
+  }
+
+  fetchTraffic();
+}, []);
 
   const getStatusBadge = (status) => {
     if (status === "LOW TRAFFIC") return <span className="px-2 py-1 bg-green-200 text-green-800 rounded-full text-sm font-semibold">LOW</span>;
