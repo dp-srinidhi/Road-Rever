@@ -6,19 +6,19 @@ const TrafficBarGraph = ({ level }) => {
 
   if (level === "LOW TRAFFIC") {
     width = "30%";
-    color = "green";
+    color = "#10B981"; // green-500
   } else if (level === "MODERATE TRAFFIC") {
     width = "60%";
-    color = "red";
+    color = "#F59E0B"; // amber-500
   } else if (level === "HIGH TRAFFIC") {
     width = "90%";
-    color = "red";
+    color = "#EF4444"; // red-500
   }
 
   return (
-    <div className="w-full bg-gray-200 h-4 rounded">
+    <div className="w-full bg-gray-200 h-4 rounded-full">
       <div
-        className="h-4 rounded"
+        className="h-4 rounded-full transition-all duration-500"
         style={{ width, backgroundColor: color }}
       ></div>
     </div>
@@ -75,7 +75,7 @@ const TrafficAnalysis = () => {
             confidence: seg.confidence,
             congestion: congestionPercent + "%",
             status: trafficLevel,
-            roverOK: trafficLevel === "HIGH TRAFFIC" ? "❌ No" : "✅ Yes"
+            roverOK: trafficLevel === "HIGH TRAFFIC" ? false : true
           });
         }
       }
@@ -86,42 +86,45 @@ const TrafficAnalysis = () => {
     fetchTraffic();
   }, []);
 
+  const getStatusBadge = (status) => {
+    if (status === "LOW TRAFFIC") return <span className="px-2 py-1 bg-green-200 text-green-800 rounded-full text-sm font-semibold">LOW</span>;
+    if (status === "MODERATE TRAFFIC") return <span className="px-2 py-1 bg-amber-200 text-amber-800 rounded-full text-sm font-semibold">MODERATE</span>;
+    if (status === "HIGH TRAFFIC") return <span className="px-2 py-1 bg-red-200 text-red-800 rounded-full text-sm font-semibold">HIGH</span>;
+  };
+
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold text-center mb-6">Live Traffic Analysis</h1>
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">Live Traffic Analysis</h1>
 
       {!traffic ? (
         <p className="text-center font-semibold text-gray-600">Loading live traffic...</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full bg-white shadow-md rounded-lg">
+          <table className="min-w-full bg-white shadow-lg rounded-lg overflow-hidden">
             <thead>
-              <tr className="bg-green-900 text-white text-left">
+              <tr className="bg-gray-900 text-white text-left">
                 <th className="p-4">Area</th>
                 <th className="p-4">Current Speed</th>
                 <th className="p-4">Free Flow Speed</th>
-                <th className="p-4">Traffic</th>
-                 <th className="p-4">Rover Deployment</th>
-                <th className="p-4">Level Bar</th> {/* MINI BAR */}
+                <th className="p-4">Congestion</th>
+                <th className="p-4">Traffic Status</th>
+                <th className="p-4">Rover Deployment</th>
+                <th className="p-4">Level Bar</th>
               </tr>
             </thead>
             <tbody>
               {traffic.map((row, i) => (
                 <tr
                   key={i}
-                  className={i % 2 === 0 ? "bg-gray-50 border-b" : "bg-white border-b"}
+                  className={i % 2 === 0 ? "bg-gray-50 hover:bg-gray-100 transition" : "bg-white hover:bg-gray-100 transition"}
                 >
-                  <td className="p-4 font-semibold">{row.area}</td>
+                  <td className="p-4 font-medium">{row.area}</td>
                   <td className="p-4">{row.currentSpeed}</td>
                   <td className="p-4">{row.freeFlow}</td>
                   <td className="p-4">{row.congestion}</td>
-
-                
-
-                  <td className="p-4 text-lg">{row.roverOK}</td>
-
-                  {/* MINI LEVEL BAR */}
-                  <td className="p-2 w-[150px]">
+                  <td className="p-4">{getStatusBadge(row.status)}</td>
+                  <td className="p-4 text-center text-lg">{row.roverOK ? "✅" : "❌"}</td>
+                  <td className="p-4 w-[150px]">
                     <TrafficBarGraph level={row.status} />
                   </td>
                 </tr>

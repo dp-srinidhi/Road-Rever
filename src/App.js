@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-
+import { Routes, Route, Link } from "react-router-dom";
 // Pages
 import ReportPothole from './pages/ReportPothole';
 import MapPage from './pages/MapPage';
@@ -36,8 +35,7 @@ const HomeContent = () => {
                         road defects instantly. We offer automated, AI-powered road monitoring,
                         precise pothole filling, and real-time mapping.
                     </p>
-                    <button className="btn btn-primary">SEE OUR WORK</button>
-                </div>
+                 </div>
             </header>
 
             <img
@@ -200,7 +198,6 @@ const Navbar = () => {
 // ------------------- App -------------------
 function App() {
     return (
-        <Router>
             <div className="App">
                 <Navbar />
 
@@ -220,8 +217,7 @@ function App() {
                     </div>
                 </footer>
             </div>
-        </Router>
-    );
+        );
 }
 
 export default App;
