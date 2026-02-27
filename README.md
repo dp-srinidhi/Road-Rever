@@ -1,16 +1,32 @@
-# Getting Started with Create React App
+Road-Rever
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Smart pothole detection and filling system integrated with website for pothole reporitng and live mapping of potholes
 
-## Available Scripts
+🌍 Live Demo
 
-In the project directory, you can run:
+🔗 Deployed Link: https://road-rever.vercel.app/
 
-### `npm start`
+📌 Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+🗺️ Interactive Map Integration (Leaflet)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+🎨 Pothole reporting feature with location, image and severity
+
+☁️ Deployed on Vercel
+
+🛠️ Tech Stack
+
+Frontend: React.js
+
+Mapping: Leaflet.js
+
+Deployment: Vercel
+
+Databse: Firebase (Firestore Database)
+
+Image storage: Cloudinary
+
+Version Control: Git & GitHub
+
+
 
