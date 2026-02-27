@@ -84,7 +84,7 @@ const TrafficAnalysis = () => {
     }
 
     fetchTraffic();
-  }, []);
+  }, [locations]);
 
   const getStatusBadge = (status) => {
     if (status === "LOW TRAFFIC") return <span className="px-2 py-1 bg-green-200 text-green-800 rounded-full text-sm font-semibold">LOW</span>;
