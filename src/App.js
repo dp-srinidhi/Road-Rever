@@ -3,7 +3,6 @@ import { Routes, Route, Link } from "react-router-dom";
 // Pages
 import ReportPothole from './pages/ReportPothole';
 import MapPage from './pages/MapPage';
-import Dashboard from './pages/Dashboard';
 import Dronedata from "./pages/Dronedata";   
 import Trafficanalysis from "./pages/trafficanalysis";
 
@@ -141,13 +140,30 @@ const HomeContent = () => {
                     </div>
                 </section>
 
-                {/* CTA */}
-                <section className="cta-section text-center">
-                    <div className="container">
-                        <h2>REVOLUTIONIZING ROAD SAFETY AND SUSTAINABILITY</h2>
-                        <button className="btn btn-primary">Connect with us</button>
-                    </div>
-                </section>
+                {/* Contact Section */}
+<section id="contact" className="contact-section">
+    <div className="container text-center">
+        <h2>Connect With Us</h2>
+        <p className="section-intro">
+            Let’s work together to build safer, smarter roads.
+        </p>
+
+        <div className="contact-details">
+            <p><strong>Email:</strong> roadrever@gmail.com</p>
+            <p><strong>Phone:</strong> +91 98765 43210</p>
+            <p><strong>Location:</strong> Chennai, India</p>
+        </div>
+
+        <form className="contact-form">
+            <input type="text" placeholder="Your Name" required />
+            <input type="email" placeholder="Your Email" required />
+            <textarea placeholder="Your Message" rows="5" required></textarea>
+            <button type="submit" className="btn btn-primary">
+                Send Message
+            </button>
+        </form>
+    </div>
+</section>
             </main>
         </>
     );
@@ -179,16 +195,14 @@ const Navbar = () => {
                 </button>
 
                 <ul className={isOpen ? "nav-links active" : "nav-links"}>
-<li>
+
+    <li><Link to="/report-pothole" className="nav-link" onClick={handleNavLinkClick}>Report Pothole</Link></li>
+   <li><Link to="/map" className="nav-link" onClick={handleNavLinkClick}>Map</Link></li>
+   <li>
         <Link to="/trafficanalysis" className="nav-link" onClick={handleNavLinkClick}>
             Traffic status
         </Link>
-    </li>                    <li><Link to="/report-pothole" className="nav-link" onClick={handleNavLinkClick}>Report Pothole</Link></li>
-                    <li><Link to="/map" className="nav-link" onClick={handleNavLinkClick}>Map</Link></li>
-<Link to="/dashboard" className="nav-link" onClick={handleNavLinkClick}>
-    Dashboard
-</Link>
-
+    </li>        
                 </ul>
             </div>
         </nav>
@@ -207,8 +221,7 @@ function App() {
                     <Route path="/map" element={<MapPage />} />
                      <Route path="/Dronedata" element={<Dronedata />} />
                     <Route path="/trafficanalysis" element={<Trafficanalysis />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
-                </Routes>
+                 </Routes>
 
                 <footer className="footer-section">
                     <div className="container">
